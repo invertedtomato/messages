@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.0</TargetFramework>
+    <AssemblyName>InvertedTomato.Messages</AssemblyName>
+    <RootNamespace>InvertedTomato</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="InvertedTomato.IntegerCompression" Version="1.2.0" />
+  </ItemGroup>
+
+</Project>
