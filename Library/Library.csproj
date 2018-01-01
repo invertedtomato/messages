@@ -4,6 +4,10 @@
     <TargetFramework>netstandard1.0</TargetFramework>
     <AssemblyName>InvertedTomato.Messages</AssemblyName>
     <RootNamespace>InvertedTomato</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>InvertedTomato</Authors>
+    <Company>InvertedTomato</Company>
+    <Description>Message formats for sending over networks or storing in files.</Description>
   </PropertyGroup>
 
   <ItemGroup>
