@@ -4,32 +4,33 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 using InvertedTomato.IO.Bits;
+using InvertedTomato.Compression.Integers;
 
 namespace LibraryTests {
     public class GenericMessageTests {
         [Fact]
         public void UnsignedInteger_Min() {
             var msg = new GenericMessage();
-            msg.WriteUnsignedInteger(0);
+            msg.WriteUnsignedInteger(VLQCodec.MinValue);
 
             var payload = msg.Export();
             Assert.Equal("10000000", payload.ToBinaryString());
 
             msg = new GenericMessage();
             msg.Import(payload);
-            Assert.Equal((UInt64)0, msg.ReadUnsignedInteger());
+            Assert.Equal(VLQCodec.MinValue, msg.ReadUnsignedInteger());
         }
         [Fact]
         public void UnsignedInteger_Max() {
             var msg = new GenericMessage();
-            msg.WriteUnsignedInteger(UInt64.MaxValue);
+            msg.WriteUnsignedInteger(VLQCodec.MaxValue);
 
             var payload = msg.Export();
-            Assert.Equal("01111111 01111110 01111110 01111110 01111110 01111110 01111110 01111110 01111110 10000000", payload.ToBinaryString());
+            Assert.Equal("01111110 01111110 01111110 01111110 01111110 01111110 01111110 01111110 01111110 10000000", payload.ToBinaryString());
 
             msg = new GenericMessage();
             msg.Import(payload);
-            Assert.Equal(UInt64.MaxValue, msg.ReadUnsignedInteger());
+            Assert.Equal(VLQCodec.MaxValue, msg.ReadUnsignedInteger());
         }
 
         [Fact]
