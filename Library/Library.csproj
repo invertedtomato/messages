@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.0</TargetFramework>
+    <TargetFramework>netstandard1.3</TargetFramework>
     <AssemblyName>InvertedTomato.Messages</AssemblyName>
     <RootNamespace>InvertedTomato</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -11,7 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="InvertedTomato.IntegerCompression" Version="1.2.0" />
+    <PackageReference Include="InvertedTomato.IntegerCompression" Version="1.2.1" />
+    <PackageReference Include="protobuf-net" Version="2.3.3" />
   </ItemGroup>
 
 </Project>
