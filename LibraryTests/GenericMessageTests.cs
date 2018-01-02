@@ -34,6 +34,31 @@ namespace LibraryTests {
         }
 
         [Fact]
+        public void SignedInteger_Plus100() {
+            var msg = new GenericMessage();
+            msg.WriteSignedInteger(+100);
+
+            var payload = msg.Export();
+            Assert.Equal("01001000 10000000", payload.ToBinaryString());
+
+            msg = new GenericMessage();
+            msg.Import(payload);
+            Assert.Equal(+100, msg.ReadSignedInteger());
+        }
+        [Fact]
+        public void SignedInteger_Minus100() {
+            var msg = new GenericMessage();
+            msg.WriteSignedInteger(-100);
+
+            var payload = msg.Export();
+            Assert.Equal("01000111 10000000", payload.ToBinaryString());
+
+            msg = new GenericMessage();
+            msg.Import(payload);
+            Assert.Equal(-100, msg.ReadSignedInteger());
+        }
+
+        [Fact]
         public void Boolean_True() {
             var msg = new GenericMessage();
             msg.WriteBoolean(true);
