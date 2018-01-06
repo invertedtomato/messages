@@ -29,5 +29,9 @@ namespace InvertedTomato.IO.Messages {
 
             Value = Encoding.UTF8.GetString(payload, 0, payload.Length);
         }
+
+        public override String ToString() {
+            return Value;
+        }
     }
 }
