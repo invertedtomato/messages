@@ -32,20 +32,21 @@ namespace InvertedTomato.IO.Messages {
             }
         }
 
-        public Byte[] Export() {
+        public ArraySegment<Byte> Export() {
             if(null == Payload) {
                 throw new InvalidOperationException("No value set.");
             }
 
-            return Payload;
+            return new ArraySegment<Byte>(Payload);
         }
 
-        public void Import(Byte[] payload) {
+        public void Import(ArraySegment<Byte> payload) {
             if(null == payload) {
                 throw new ArgumentNullException(nameof(payload));
             }
 
-            Payload = payload;
+            Payload = new Byte[payload.Count];
+            Array.Copy(payload.Array, payload.Offset, Payload, 0, payload.Count);
         }
     }
 }

@@ -8,7 +8,7 @@
     <Authors>InvertedTomato</Authors>
     <Company>InvertedTomato</Company>
     <Description>Message formats for sending over networks or storing in files.</Description>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
   </PropertyGroup>
 
   <ItemGroup>

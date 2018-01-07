@@ -14,20 +14,20 @@ namespace InvertedTomato.IO.Messages {
             Value = value;
         }
 
-        public Byte[] Export() {
+        public ArraySegment<Byte> Export() {
             if(null == Value) {
                 throw new InvalidOperationException("No value set.");
             }
 
-            return Encoding.UTF8.GetBytes(Value);
+            return new ArraySegment<Byte>(Encoding.UTF8.GetBytes(Value));
         }
 
-        public void Import(Byte[] payload) {
+        public void Import(ArraySegment<Byte> payload) {
             if(null == payload) {
                 throw new ArgumentNullException(nameof(payload));
             }
 
-            Value = Encoding.UTF8.GetString(payload, 0, payload.Length);
+            Value = Encoding.UTF8.GetString(payload.Array, payload.Offset, payload.Count);
         }
 
         public override String ToString() {

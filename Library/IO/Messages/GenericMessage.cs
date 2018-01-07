@@ -5,7 +5,7 @@ using System.Text;
 using System.Linq;
 
 namespace InvertedTomato.IO.Messages {
-    public sealed class GenericMessage :  IMessage {
+    public sealed class GenericMessage : IMessage {
         private readonly MemoryStream Underlying = new MemoryStream();
         private readonly VLQCodec VLQ = new VLQCodec();
 
@@ -38,7 +38,7 @@ namespace InvertedTomato.IO.Messages {
 
             return this;
         }
-        
+
         public GenericMessage WriteFloat(Single value) {
             return WriteByteArray(BitConverter.GetBytes(value));
         }
@@ -237,7 +237,7 @@ namespace InvertedTomato.IO.Messages {
                 return null;
             }
         }
-        
+
         public Single ReadFloat() {
             return BitConverter.ToSingle(ReadByteArray(4), 0);
         }
@@ -264,7 +264,7 @@ namespace InvertedTomato.IO.Messages {
             var a = ReadByteArray(1).Single();
             if(a == 0x00) {
                 return false;
-            }else if(a == 0x01) {
+            } else if(a == 0x01) {
                 return true;
             } else {
                 throw new InvalidDataException("Expected 0x01 or 0x00.");
@@ -348,12 +348,12 @@ namespace InvertedTomato.IO.Messages {
         }
 
 
-        public Byte[] Export() {
-            return Underlying.ToArray();
+        public ArraySegment<Byte> Export() {
+            return new ArraySegment<Byte>(Underlying.ToArray());
         }
 
-        public void Import(Byte[] payload) {
-            Underlying.Write(payload, 0, payload.Length);
+        public void Import(ArraySegment<Byte> payload) {
+            Underlying.Write(payload.Array, payload.Offset, payload.Count);
             Underlying.Seek(0, SeekOrigin.Begin);
         }
     }

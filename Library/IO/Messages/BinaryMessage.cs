@@ -13,20 +13,21 @@ namespace InvertedTomato.IO.Messages {
             Value = value;
         }
 
-        public Byte[] Export() {
+        public ArraySegment<Byte> Export() {
             if(null == Value) {
                 throw new InvalidOperationException("No value set.");
             }
 
-            return Value;
+            return new ArraySegment<Byte>(Value);
         }
 
-        public void Import(Byte[] payload) {
+        public void Import(ArraySegment<Byte> payload) {
             if(null == payload) {
                 throw new ArgumentNullException(nameof(payload));
             }
 
-            Value = payload;
+            Value = new Byte[payload.Count];
+            Array.Copy(payload.Array, payload.Offset, Value, 0, payload.Count);
         }
     }
 }

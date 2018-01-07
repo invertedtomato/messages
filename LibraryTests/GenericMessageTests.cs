@@ -14,7 +14,7 @@ namespace LibraryTests {
             msg.WriteUnsignedInteger(VLQCodec.MinValue);
 
             var payload = msg.Export();
-            Assert.Equal("10000000", payload.ToBinaryString());
+            Assert.Equal("10000000", payload.ToArray().ToBinaryString());
 
             msg = new GenericMessage();
             msg.Import(payload);
@@ -26,7 +26,7 @@ namespace LibraryTests {
             msg.WriteUnsignedInteger(VLQCodec.MaxValue);
 
             var payload = msg.Export();
-            Assert.Equal("01111110 01111110 01111110 01111110 01111110 01111110 01111110 01111110 01111110 10000000", payload.ToBinaryString());
+            Assert.Equal("01111110 01111110 01111110 01111110 01111110 01111110 01111110 01111110 01111110 10000000", payload.ToArray().ToBinaryString());
 
             msg = new GenericMessage();
             msg.Import(payload);
@@ -39,7 +39,7 @@ namespace LibraryTests {
             msg.WriteSignedInteger(+100);
 
             var payload = msg.Export();
-            Assert.Equal("01001000 10000000", payload.ToBinaryString());
+            Assert.Equal("01001000 10000000", payload.ToArray().ToBinaryString());
 
             msg = new GenericMessage();
             msg.Import(payload);
@@ -51,7 +51,7 @@ namespace LibraryTests {
             msg.WriteSignedInteger(-100);
 
             var payload = msg.Export();
-            Assert.Equal("01000111 10000000", payload.ToBinaryString());
+            Assert.Equal("01000111 10000000", payload.ToArray().ToBinaryString());
 
             msg = new GenericMessage();
             msg.Import(payload);
@@ -64,7 +64,7 @@ namespace LibraryTests {
             msg.WriteBoolean(true);
 
             var payload = msg.Export();
-            Assert.Equal("00000001", payload.ToBinaryString());
+            Assert.Equal("00000001", payload.ToArray().ToBinaryString());
 
             msg = new GenericMessage();
             msg.Import(payload);
@@ -78,7 +78,7 @@ namespace LibraryTests {
             msg.WriteBoolean(false);
 
             var payload = msg.Export();
-            Assert.Equal("00000000", payload.ToBinaryString());
+            Assert.Equal("00000000", payload.ToArray().ToBinaryString());
 
             msg = new GenericMessage();
             msg.Import(payload);
