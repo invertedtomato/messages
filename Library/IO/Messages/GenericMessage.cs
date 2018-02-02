@@ -5,7 +5,9 @@ using System.Text;
 using System.Linq;
 
 namespace InvertedTomato.IO.Messages {
-    public sealed class GenericMessage : IMessage {
+    public sealed class GenericMessage : IImportableMessage, IExportableMessage {
+        public UInt32 TypeCode { get { return 2; } }
+
         private readonly MemoryStream Underlying = new MemoryStream();
         private readonly VLQCodec VLQ = new VLQCodec();
 
@@ -14,7 +16,7 @@ namespace InvertedTomato.IO.Messages {
             return this;
         }
         public GenericMessage WriteNullableUnsignedInteger(UInt64? value) {
-            if(null == value) {
+            if (null == value) {
                 WriteUnsignedInteger(0);
             } else {
                 WriteUnsignedInteger(1);
@@ -29,7 +31,7 @@ namespace InvertedTomato.IO.Messages {
             return this;
         }
         public GenericMessage WriteNullableSignedInteger(Int64? value) {
-            if(null == value) {
+            if (null == value) {
                 WriteUnsignedInteger(0);
             } else {
                 WriteUnsignedInteger(1);
@@ -43,7 +45,7 @@ namespace InvertedTomato.IO.Messages {
             return WriteByteArray(BitConverter.GetBytes(value));
         }
         public GenericMessage WriteNullableFloat(Single? value) {
-            if(null == value) {
+            if (null == value) {
                 WriteUnsignedInteger(0);
             } else {
                 WriteUnsignedInteger(1);
@@ -57,7 +59,7 @@ namespace InvertedTomato.IO.Messages {
             return WriteByteArray(BitConverter.GetBytes(value));
         }
         public GenericMessage WriteNullableDouble(Double? value) {
-            if(null == value) {
+            if (null == value) {
                 WriteUnsignedInteger(0);
             } else {
                 WriteUnsignedInteger(1);
@@ -71,7 +73,7 @@ namespace InvertedTomato.IO.Messages {
             return WriteByteArray(new Byte[] { value ? (Byte)0x01 : (Byte)0x00 });
         }
         public GenericMessage WriteNullableBoolean(Boolean? value) {
-            if(null == value) {
+            if (null == value) {
                 WriteBoolean(false);
             } else {
                 WriteBoolean(true);
@@ -84,7 +86,7 @@ namespace InvertedTomato.IO.Messages {
             return WriteByteArray(value.ToByteArray());
         }
         public GenericMessage WriteNullableGuid(Guid? value) {
-            if(null == value) {
+            if (null == value) {
                 WriteUnsignedInteger(0);
             } else {
                 WriteUnsignedInteger(1);
@@ -98,7 +100,7 @@ namespace InvertedTomato.IO.Messages {
             return WriteSignedInteger(value.Ticks);
         }
         public GenericMessage WriteNullableTime(TimeSpan? value) {
-            if(null == value) {
+            if (null == value) {
                 WriteUnsignedInteger(0);
             } else {
                 WriteUnsignedInteger(1);
@@ -112,7 +114,7 @@ namespace InvertedTomato.IO.Messages {
             return WriteSignedInteger((Int64)value.TotalSeconds);
         }
         public GenericMessage WriteNullableTimeSimple(TimeSpan? value) {
-            if(null == value) {
+            if (null == value) {
                 WriteUnsignedInteger(0);
             } else {
                 WriteUnsignedInteger(1);
@@ -126,7 +128,7 @@ namespace InvertedTomato.IO.Messages {
             return WriteSignedInteger(value.Ticks);
         }
         public GenericMessage WriteNullableDateTime(DateTime? value) {
-            if(null == value) {
+            if (null == value) {
                 WriteUnsignedInteger(0);
             } else {
                 WriteUnsignedInteger(1);
@@ -140,7 +142,7 @@ namespace InvertedTomato.IO.Messages {
             return WriteSignedInteger(value.Ticks / TimeSpan.TicksPerMillisecond); // TODO
         }
         public GenericMessage WriteNullableDateTimeSimple(DateTime? value) {
-            if(null == value) {
+            if (null == value) {
                 WriteUnsignedInteger(0);
             } else {
                 WriteUnsignedInteger(1);
@@ -151,7 +153,7 @@ namespace InvertedTomato.IO.Messages {
         }
 
         public GenericMessage WriteString(String value) {
-            if(null == value) {
+            if (null == value) {
                 throw new ArgumentNullException(nameof(value));
             }
 
@@ -167,7 +169,7 @@ namespace InvertedTomato.IO.Messages {
             return this;
         }
         public GenericMessage WriteNullableString(String value) {
-            if(null == value) {
+            if (null == value) {
                 WriteUnsignedInteger(0);
             } else {
                 WriteUnsignedInteger(1);
@@ -178,7 +180,7 @@ namespace InvertedTomato.IO.Messages {
         }
 
         public GenericMessage WriteByteArray(Byte[] value) {
-            if(null == value) {
+            if (null == value) {
                 throw new ArgumentNullException(nameof(value));
             }
 
@@ -188,7 +190,7 @@ namespace InvertedTomato.IO.Messages {
         }
         public Byte[] ReadByteArray(Int32 count) {
             var buffer = new Byte[count];
-            if(Underlying.Read(buffer, 0, buffer.Length) != count) {
+            if (Underlying.Read(buffer, 0, buffer.Length) != count) {
                 throw new EndOfStreamException();
             }
 
@@ -196,7 +198,7 @@ namespace InvertedTomato.IO.Messages {
         }
 
         public GenericMessage WriteByteArray(Byte[] value, Int32 offset, Int32 count) {
-            if(null == value) {
+            if (null == value) {
                 throw new ArgumentNullException(nameof(value));
             }
 
@@ -206,7 +208,7 @@ namespace InvertedTomato.IO.Messages {
         }
         public Byte[] ReadByteArray(Int32 offset, Int32 count) {
             var buffer = new Byte[count];
-            if(Underlying.Read(buffer, offset, buffer.Length) != count) {
+            if (Underlying.Read(buffer, offset, buffer.Length) != count) {
                 throw new OverflowException();
             }
 
@@ -220,7 +222,7 @@ namespace InvertedTomato.IO.Messages {
             return VLQ.DecompressUnsigned(Underlying, 1).Single();
         }
         public UInt64? ReadNullableUInt8() {
-            if(ReadBoolean()) {
+            if (ReadBoolean()) {
                 return ReadUnsignedInteger();
             } else {
                 return null;
@@ -231,7 +233,7 @@ namespace InvertedTomato.IO.Messages {
             return VLQ.DecompressSigned(Underlying, 1).Single();
         }
         public Int64? ReadNullableSInt8() {
-            if(ReadBoolean()) {
+            if (ReadBoolean()) {
                 return ReadSignedInteger();
             } else {
                 return null;
@@ -242,7 +244,7 @@ namespace InvertedTomato.IO.Messages {
             return BitConverter.ToSingle(ReadByteArray(4), 0);
         }
         public Single? ReadNullableFloat() {
-            if(ReadBoolean()) {
+            if (ReadBoolean()) {
                 return ReadFloat();
             } else {
                 return null;
@@ -253,7 +255,7 @@ namespace InvertedTomato.IO.Messages {
             return BitConverter.ToDouble(ReadByteArray(8), 0);
         }
         public Double? ReadNullableDouble() {
-            if(ReadBoolean()) {
+            if (ReadBoolean()) {
                 return ReadDouble();
             } else {
                 return null;
@@ -262,16 +264,16 @@ namespace InvertedTomato.IO.Messages {
 
         public Boolean ReadBoolean() {
             var a = ReadByteArray(1).Single();
-            if(a == 0x00) {
+            if (a == 0x00) {
                 return false;
-            } else if(a == 0x01) {
+            } else if (a == 0x01) {
                 return true;
             } else {
                 throw new InvalidDataException("Expected 0x01 or 0x00.");
             }
         }
         public Boolean? ReadNullableBoolean() {
-            if(ReadBoolean()) {
+            if (ReadBoolean()) {
                 return ReadBoolean();
             } else {
                 return null;
@@ -282,7 +284,7 @@ namespace InvertedTomato.IO.Messages {
             return new Guid(ReadByteArray(16));
         }
         public Guid? ReadNullableGuid() {
-            if(ReadBoolean()) {
+            if (ReadBoolean()) {
                 return ReadGuid();
             } else {
                 return null;
@@ -293,7 +295,7 @@ namespace InvertedTomato.IO.Messages {
             return new TimeSpan(ReadSignedInteger());
         }
         public TimeSpan? ReadNullableTime() {
-            if(ReadBoolean()) {
+            if (ReadBoolean()) {
                 return ReadTime();
             } else {
                 return null;
@@ -304,7 +306,7 @@ namespace InvertedTomato.IO.Messages {
             return new TimeSpan(ReadSignedInteger() * TimeSpan.TicksPerSecond);
         }
         public TimeSpan? ReadNullableTimeSimple() {
-            if(ReadBoolean()) {
+            if (ReadBoolean()) {
                 return ReadTimeSimple();
             } else {
                 return null;
@@ -315,7 +317,7 @@ namespace InvertedTomato.IO.Messages {
             return new DateTime(ReadSignedInteger());
         }
         public DateTime? ReadNullableDateTime() {
-            if(ReadBoolean()) {
+            if (ReadBoolean()) {
                 return ReadDateTime();
             } else {
                 return null;
@@ -326,7 +328,7 @@ namespace InvertedTomato.IO.Messages {
             return new DateTime(ReadSignedInteger() * TimeSpan.TicksPerMillisecond);
         }
         public DateTime? ReadNullableDateTimeSimple() {
-            if(ReadBoolean()) {
+            if (ReadBoolean()) {
                 return ReadDateTimeSimple();
             } else {
                 return null;
@@ -340,7 +342,7 @@ namespace InvertedTomato.IO.Messages {
             return Encoding.UTF8.GetString(raw, 0, raw.Length);
         }
         public String ReadNullableString() {
-            if(ReadBoolean()) {
+            if (ReadBoolean()) {
                 return ReadString();
             } else {
                 return null;
@@ -353,6 +355,12 @@ namespace InvertedTomato.IO.Messages {
         }
 
         public void Import(ArraySegment<Byte> payload) {
+#if DEBUG
+            if (null == payload) {
+                throw new ArgumentNullException(nameof(payload));
+            }
+#endif
+
             Underlying.Write(payload.Array, payload.Offset, payload.Count);
             Underlying.Seek(0, SeekOrigin.Begin);
         }

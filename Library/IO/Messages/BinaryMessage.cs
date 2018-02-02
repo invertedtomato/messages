@@ -1,12 +1,14 @@
 ﻿using System;
 
 namespace InvertedTomato.IO.Messages {
-    public class BinaryMessage : IMessage {
+    public class BinaryMessage : IImportableMessage, IExportableMessage {
+        public UInt32 TypeCode { get { return 0; } }
+
         public Byte[] Value { get; set; }
 
         public BinaryMessage() { }
         public BinaryMessage(Byte[] value) {
-            if(null == value) {
+            if (null == value) {
                 throw new ArgumentNullException(nameof(value));
             }
 
@@ -14,7 +16,7 @@ namespace InvertedTomato.IO.Messages {
         }
 
         public ArraySegment<Byte> Export() {
-            if(null == Value) {
+            if (null == Value) {
                 throw new InvalidOperationException("No value set.");
             }
 
@@ -22,9 +24,11 @@ namespace InvertedTomato.IO.Messages {
         }
 
         public void Import(ArraySegment<Byte> payload) {
-            if(null == payload) {
+#if DEBUG
+            if (null == payload) {
                 throw new ArgumentNullException(nameof(payload));
             }
+#endif
 
             Value = new Byte[payload.Count];
             Array.Copy(payload.Array, payload.Offset, Value, 0, payload.Count);

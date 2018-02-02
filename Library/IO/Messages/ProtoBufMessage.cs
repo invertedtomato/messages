@@ -3,7 +3,9 @@ using System;
 using System.IO;
 
 namespace InvertedTomato.IO.Messages {
-    public class ProtoBufMessage<T> : IMessage {
+    public class ProtoBufMessage<T> : IMessage, IImportableMessage, IExportableMessage {
+        public UInt32 TypeCode { get { return 3; } }
+
         public Byte[] Payload { get; set; }
 
         public ProtoBufMessage() { }

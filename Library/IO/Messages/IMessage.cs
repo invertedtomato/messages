@@ -2,7 +2,6 @@
 
 namespace InvertedTomato.IO.Messages {
     public interface IMessage {
-        ArraySegment<Byte> Export();
-        void Import(ArraySegment<Byte> payload);
+        UInt32 TypeCode { get; }
     }
 }

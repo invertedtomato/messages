@@ -12,8 +12,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="InvertedTomato.IntegerCompression" Version="1.2.1" />
-    <PackageReference Include="protobuf-net" Version="2.3.3" />
+    <Compile Remove="IO\Messages\ProtoBufMessage.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="InvertedTomato.IntegerCompression" Version="1.2.2" />
   </ItemGroup>
 
 </Project>
