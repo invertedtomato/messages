@@ -2,7 +2,7 @@
 
 namespace InvertedTomato.IO.Messages {
     public class BinaryMessage : IImportableMessage, IExportableMessage {
-        public UInt32 TypeCode { get { return 0; } }
+        public UInt32 TypeCode { get { return 1; } }
 
         public Byte[] Value { get; set; }
 

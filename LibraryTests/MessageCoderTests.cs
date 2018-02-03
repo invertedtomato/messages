@@ -26,7 +26,7 @@ namespace LibraryTests {
                 stream.Position = 0;
 
                 Assert.Equal(6, stream.Length);
-                Assert.Equal((UInt32)1, VLQDecompress(stream)); // typecode
+                Assert.Equal((UInt32)2, VLQDecompress(stream)); // typecode
                 Assert.Equal((UInt32)4, VLQDecompress(stream)); // length
                 Assert.Equal('t', stream.ReadByte());
                 Assert.Equal('e', stream.ReadByte());
@@ -38,7 +38,7 @@ namespace LibraryTests {
         [Fact]
         public void Read_Simple() {
             using (var stream = new MemoryStream()) {
-                VLQCompress(stream, 1); // typecode
+                VLQCompress(stream, 2); // typecode
                 VLQCompress(stream, 4); // length
                 stream.WriteByte((Byte)'t'); // payload
                 stream.WriteByte((Byte)'e');
@@ -57,7 +57,7 @@ namespace LibraryTests {
         [Fact]
         public void Read_Simple_Mismatch() {
             using (var stream = new MemoryStream()) {
-                VLQCompress(stream, 1); // typecode
+                VLQCompress(stream, 2); // typecode
                 VLQCompress(stream, 4); // length
                 stream.WriteByte((Byte)'t'); // payload
                 stream.WriteByte((Byte)'e');
@@ -77,7 +77,7 @@ namespace LibraryTests {
         [Fact]
         public void Read_Register() {
             using (var stream = new MemoryStream()) {
-                VLQCompress(stream, 1); // typecode
+                VLQCompress(stream, 2); // typecode
                 VLQCompress(stream, 4); // length
                 stream.WriteByte((Byte)'t'); // payload
                 stream.WriteByte((Byte)'e');
@@ -104,7 +104,7 @@ namespace LibraryTests {
         [Fact]
         public void Read_Register_Mismatch() {
             using (var stream = new MemoryStream()) {
-                VLQCompress(stream, 1); // typecode
+                VLQCompress(stream, 2); // typecode
                 VLQCompress(stream, 4); // length
                 stream.WriteByte((Byte)'t'); // payload
                 stream.WriteByte((Byte)'e');

@@ -3,7 +3,7 @@ using System.Text;
 
 namespace InvertedTomato.IO.Messages {
     public class StringMessage : IImportableMessage, IExportableMessage {
-        public UInt32 TypeCode { get { return 1; } }
+        public UInt32 TypeCode { get { return 2; } }
 
         public String Value { get; set; }
 

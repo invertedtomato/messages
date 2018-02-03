@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace InvertedTomato.IO.Messages {
     public sealed class GenericMessage : IImportableMessage, IExportableMessage {
-        public UInt32 TypeCode { get { return 2; } }
+        public UInt32 TypeCode { get { return 8; } }
 
         private readonly MemoryStream Underlying = new MemoryStream();
         private readonly VLQCodec VLQ = new VLQCodec();
