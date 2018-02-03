@@ -5,9 +5,8 @@ using System.Linq;
 
 namespace InvertedTomato.IO.Messages {
     /// <summary>
-    /// Reads and write messages on a stream in the following format: C+T+L+P*
+    /// Reads and write messages on a stream in the following format: C+L+P*
     ///   C+  VLQ-encoded typecode used to distinguish the message type needed for decoding
-    ///   T+  VLQ-encoded topic used to distinguish what this message relates to (not always needed)
     ///   L+  VLQ-encoded payload length
     ///   P*  Payload
     /// </summary>
@@ -34,12 +33,9 @@ namespace InvertedTomato.IO.Messages {
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T Read<T>() where T : IImportableMessage, new() { // C+T+L+P*
+        public T Read<T>() where T : IImportableMessage, new() { // C+L+P*
             // Read typecode
             var typeCode = VLQ.DecompressUnsigned(Underlying, 1).First();
-
-            // Read topic
-            var topic = VLQ.DecompressUnsigned(Underlying, 1).First();
 
             // Read payload length
             var length = VLQ.DecompressUnsigned(Underlying, 1).First();
@@ -84,9 +80,6 @@ namespace InvertedTomato.IO.Messages {
             // Read typecode
             var typeCode = (UInt32)VLQ.DecompressUnsigned(Underlying, 1).First();
 
-            // Read topic
-            var topic = (UInt32)VLQ.DecompressUnsigned(Underlying, 1).First();
-
             // Read payload length
             var length = VLQ.DecompressUnsigned(Underlying, 1).First();
 
@@ -102,24 +95,14 @@ namespace InvertedTomato.IO.Messages {
             } while (pos < length);
 
             // Invoke callback
-            register.Invoke(typeCode, new ArraySegment<Byte>(payload), topic);
+            register.Invoke(typeCode, new ArraySegment<Byte>(payload));
         }
-
-
+        
         /// <summary>
         /// Write a message.
         /// </summary>
         /// <param name="message"></param>
         public void Write(IExportableMessage message) {
-            Write(message, 0);
-        }
-
-        /// <summary>
-        /// Write a message with a topic.
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="topic">Number to identify what this message refers to.</param>
-        public void Write(IExportableMessage message, UInt32 topic) {
 #if DEBUG
             if (null == message) {
                 throw new ArgumentNullException(nameof(message));
@@ -129,8 +112,8 @@ namespace InvertedTomato.IO.Messages {
             // Extract payload
             var payload = message.Export();
 
-            // Write typecode, topic and length
-            VLQ.CompressUnsigned(Underlying, message.TypeCode, topic, payload.Count);
+            // Write typecode and length
+            VLQ.CompressUnsigned(Underlying, message.TypeCode, payload.Count);
 
             // Write payload
             Underlying.Write(payload.Array, payload.Offset, payload.Count);

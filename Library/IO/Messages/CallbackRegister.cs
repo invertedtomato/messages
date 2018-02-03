@@ -3,16 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace InvertedTomato.IO.Messages {
-    public class CallbackRegister:IEnumerable {
+    public class CallbackRegister : IEnumerable {
         private readonly Dictionary<UInt32, HandlerRecord> Handlers = new Dictionary<UInt32, HandlerRecord>();
         private class HandlerRecord {
             public Type ObjectType { get; set; }
             public Delegate Callback { get; set; }
         }
 
-        public event Action<UInt32, ArraySegment<Byte>, UInt32> OnUnknownMessage; // typecode, payload, topic
+        public event Action<UInt32, ArraySegment<Byte>> OnUnknownMessage; // typecode, payload
 
-        public void Add<T>(Action<T, UInt32> callback) where T : IImportableMessage, new() { // message, topic
+        public void Add<T>(Action<T> callback) where T : IImportableMessage, new() { // message
             // Extract typeCode
             var sample = new T();
             var typeCode = sample.TypeCode;
@@ -33,22 +33,22 @@ namespace InvertedTomato.IO.Messages {
             }
         }
 
-        public void Invoke(UInt32 typeCode, ArraySegment<Byte> payload, UInt32 topic) {
+        public void Invoke(UInt32 typeCode, ArraySegment<Byte> payload) {
             // Get handler
-            if(!Handlers.TryGetValue(typeCode, out var handler)) {
+            if (!Handlers.TryGetValue(typeCode, out var handler)) {
                 // No handler, raise unknown event
-                OnUnknownMessage(typeCode, payload, topic);
+                OnUnknownMessage(typeCode, payload);
                 return;
             }
 
             // Create message
             var msg = (IImportableMessage)Activator.CreateInstance(handler.ObjectType);
-            
+
             // Import payload
             msg.Import(payload);
 
             // Invoke handler with message
-            handler.Callback.DynamicInvoke(msg, topic);
+            handler.Callback.DynamicInvoke(msg);
         }
 
         public IEnumerator GetEnumerator() {

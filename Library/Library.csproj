@@ -8,9 +8,9 @@
     <Authors>InvertedTomato</Authors>
     <Company>InvertedTomato</Company>
     <Description>Message formats for sending over networks or storing in files.</Description>
-    <Version>1.2.0</Version>
-    <AssemblyVersion>1.2.0.0</AssemblyVersion>
-    <FileVersion>1.2.0.0</FileVersion>
+    <Version>1.2.1</Version>
+    <AssemblyVersion>1.2.1.0</AssemblyVersion>
+    <FileVersion>1.2.1.0</FileVersion>
     <PackageReleaseNotes>Added MessageCoder.</PackageReleaseNotes>
   </PropertyGroup>
 

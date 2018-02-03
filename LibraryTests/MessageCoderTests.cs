@@ -17,7 +17,7 @@ namespace LibraryTests {
         }
 
         [Fact]
-        public void Write_WithoutTopic() {
+        public void Write() {
             using (var stream = new MemoryStream()) {
                 using (var coder = new MessageCoder(stream, false)) {
                     coder.Write(new StringMessage("test"));
@@ -25,9 +25,8 @@ namespace LibraryTests {
 
                 stream.Position = 0;
 
-                Assert.Equal(7, stream.Length);
+                Assert.Equal(6, stream.Length);
                 Assert.Equal((UInt32)1, VLQDecompress(stream)); // typecode
-                Assert.Equal((UInt32)0, VLQDecompress(stream)); // topic
                 Assert.Equal((UInt32)4, VLQDecompress(stream)); // length
                 Assert.Equal('t', stream.ReadByte());
                 Assert.Equal('e', stream.ReadByte());
@@ -37,30 +36,9 @@ namespace LibraryTests {
         }
 
         [Fact]
-        public void Write_WithTopic() {
-            using (var stream = new MemoryStream()) {
-                using (var coder = new MessageCoder(stream, false)) {
-                    coder.Write(new StringMessage("test"), 5);
-                }
-
-                stream.Position = 0;
-
-                Assert.Equal(7, stream.Length);
-                Assert.Equal((UInt32)1, VLQDecompress(stream)); // typecode
-                Assert.Equal((UInt32)5, VLQDecompress(stream)); // topic
-                Assert.Equal((UInt32)4, VLQDecompress(stream)); // length
-                Assert.Equal('t', stream.ReadByte());
-                Assert.Equal('e', stream.ReadByte());
-                Assert.Equal('s', stream.ReadByte());
-                Assert.Equal('t', stream.ReadByte());
-            }
-        }
-
-        [Fact]
-        public void Write_ReadSimple() {
+        public void Read_Simple() {
             using (var stream = new MemoryStream()) {
                 VLQCompress(stream, 1); // typecode
-                VLQCompress(stream, 5); // topic
                 VLQCompress(stream, 4); // length
                 stream.WriteByte((Byte)'t'); // payload
                 stream.WriteByte((Byte)'e');
@@ -77,10 +55,9 @@ namespace LibraryTests {
         }
 
         [Fact]
-        public void Write_ReadSimple_Mismatch() {
+        public void Read_Simple_Mismatch() {
             using (var stream = new MemoryStream()) {
                 VLQCompress(stream, 1); // typecode
-                VLQCompress(stream, 5); // topic
                 VLQCompress(stream, 4); // length
                 stream.WriteByte((Byte)'t'); // payload
                 stream.WriteByte((Byte)'e');
@@ -98,10 +75,9 @@ namespace LibraryTests {
         }
 
         [Fact]
-        public void Write_Register() {
+        public void Read_Register() {
             using (var stream = new MemoryStream()) {
                 VLQCompress(stream, 1); // typecode
-                VLQCompress(stream, 5); // topic
                 VLQCompress(stream, 4); // length
                 stream.WriteByte((Byte)'t'); // payload
                 stream.WriteByte((Byte)'e');
@@ -113,9 +89,8 @@ namespace LibraryTests {
                 using (var coder = new MessageCoder(stream, false)) {
                     var complete = false;
                     var register = new CallbackRegister() {
-                        (StringMessage message, UInt32 topic) => {
+                        (StringMessage message) => {
                             Assert.Equal("test", message.Value);
-                            Assert.Equal((UInt32)5, topic);
                             complete = true;
                         }
                     };
@@ -127,10 +102,9 @@ namespace LibraryTests {
 
 
         [Fact]
-        public void Write_Register_Mismatch() {
+        public void Read_Register_Mismatch() {
             using (var stream = new MemoryStream()) {
                 VLQCompress(stream, 1); // typecode
-                VLQCompress(stream, 5); // topic
                 VLQCompress(stream, 4); // length
                 stream.WriteByte((Byte)'t'); // payload
                 stream.WriteByte((Byte)'e');
@@ -141,12 +115,12 @@ namespace LibraryTests {
 
                 using (var coder = new MessageCoder(stream, false)) {
                     var register = new CallbackRegister() {
-                        (BinaryMessage message, UInt32 topic) => {
+                        (BinaryMessage message) => {
                             Assert.False(true);
                         }
                     };
                     var complete = false;
-                    register.OnUnknownMessage += (typeCode, payload, topic) => {
+                    register.OnUnknownMessage += (typeCode, payload) => {
                         complete = true;
                     };
                     coder.Read(register);
