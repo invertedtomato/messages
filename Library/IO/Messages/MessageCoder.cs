@@ -34,10 +34,8 @@ namespace InvertedTomato.IO.Messages {
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public T Read<T>() where T : IImportableMessage, new() { // C+L+P*
-            // Read typecode
+            // Read header
             var typeCode = VLQ.DecompressUnsigned(Underlying, 1).First();
-
-            // Read payload length
             var length = VLQ.DecompressUnsigned(Underlying, 1).First();
 
             // Read payload
@@ -77,10 +75,8 @@ namespace InvertedTomato.IO.Messages {
             }
 #endif
 
-            // Read typecode
+            // Read header
             var typeCode = (UInt32)VLQ.DecompressUnsigned(Underlying, 1).First();
-
-            // Read payload length
             var length = VLQ.DecompressUnsigned(Underlying, 1).First();
 
             // Read payload
