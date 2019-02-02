@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
@@ -11,7 +11,13 @@
     <Version>1.2.1</Version>
     <AssemblyVersion>1.2.1.0</AssemblyVersion>
     <FileVersion>1.2.1.0</FileVersion>
-    <PackageReleaseNotes>Added MessageCoder.</PackageReleaseNotes>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageVersion>1.2.2</PackageVersion>
+    <Title>InvertedTomato.Messages</Title>
+    <PackageProjectUrl>https://github.com/invertedtomato/messages</PackageProjectUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/invertedtomato/messages/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/invertedtomato/messages</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
