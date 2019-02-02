@@ -1,15 +1,13 @@
 ﻿using System;
 
 namespace InvertedTomato.IO.Messages {
-    public class NullMessage : IImportableMessage, IExportableMessage {
-        public UInt32 TypeCode { get { return 0; } }
+	public class NullMessage : IImportableMessage, IExportableMessage {
+		public ArraySegment<Byte> Export() {
+			return new ArraySegment<Byte>(new Byte[] { });
+		}
 
-        public NullMessage() { }
+		public UInt32 TypeCode => 0;
 
-        public ArraySegment<Byte> Export() {
-            return new ArraySegment<Byte>(new Byte[] { });
-        }
-
-        public void Import(ArraySegment<Byte> payload) { }
-    }
+		public void Import(ArraySegment<Byte> payload) { }
+	}
 }

@@ -12,7 +12,7 @@
     <AssemblyVersion>1.2.1.0</AssemblyVersion>
     <FileVersion>1.2.1.0</FileVersion>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <PackageVersion>1.2.2</PackageVersion>
+    <PackageVersion>1.2.3</PackageVersion>
     <Title>InvertedTomato.Messages</Title>
     <PackageProjectUrl>https://github.com/invertedtomato/messages</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/invertedtomato/messages/master/LICENSE</PackageLicenseUrl>

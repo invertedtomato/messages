@@ -2,40 +2,41 @@
 using System.Text;
 
 namespace InvertedTomato.IO.Messages {
-    public class StringMessage : IImportableMessage, IExportableMessage {
-        public UInt32 TypeCode { get { return 2; } }
+	public class StringMessage : IImportableMessage, IExportableMessage {
+		public StringMessage() { }
 
-        public String Value { get; set; }
+		public StringMessage(String value) {
+			if (null == value) {
+				throw new ArgumentNullException(nameof(value));
+			}
 
-        public StringMessage() { }
-        public StringMessage(String value) {
-            if (null == value) {
-                throw new ArgumentNullException(nameof(value));
-            }
+			Value = value;
+		}
 
-            Value = value;
-        }
+		public String Value { get; set; }
 
-        public ArraySegment<Byte> Export() {
-            if (null == Value) {
-                throw new InvalidOperationException("No value set.");
-            }
+		public ArraySegment<Byte> Export() {
+			if (null == Value) {
+				throw new InvalidOperationException("No value set.");
+			}
 
-            return new ArraySegment<Byte>(Encoding.UTF8.GetBytes(Value));
-        }
+			return new ArraySegment<Byte>(Encoding.UTF8.GetBytes(Value));
+		}
 
-        public void Import(ArraySegment<Byte> payload) {
+		public UInt32 TypeCode => 2;
+
+		public void Import(ArraySegment<Byte> payload) {
 #if DEBUG
-            if (null == payload) {
-                throw new ArgumentNullException(nameof(payload));
-            }
+			if (null == payload) {
+				throw new ArgumentNullException(nameof(payload));
+			}
 #endif
 
-            Value = Encoding.UTF8.GetString(payload.Array, payload.Offset, payload.Count);
-        }
+			Value = Encoding.UTF8.GetString(payload.Array, payload.Offset, payload.Count);
+		}
 
-        public override String ToString() {
-            return Value;
-        }
-    }
+		public override String ToString() {
+			return Value;
+		}
+	}
 }

@@ -1,90 +1,88 @@
-﻿using InvertedTomato.IO.Messages;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
+﻿using InvertedTomato.Compression.Integers;
 using InvertedTomato.IO.Bits;
-using InvertedTomato.Compression.Integers;
+using InvertedTomato.IO.Messages;
+using Xunit;
 
 namespace LibraryTests {
-    public class GenericMessageTests {
-        [Fact]
-        public void UnsignedInteger_Min() {
-            var msg = new GenericMessage();
-            msg.WriteUnsignedInteger(VLQCodec.MinValue);
+	public class GenericMessageTests {
+		[Fact]
+		public void Boolean_False() {
+			var msg = new GenericMessage();
+			msg.WriteBoolean(false);
 
-            var payload = msg.Export();
-            Assert.Equal("10000000", payload.ToArray().ToBinaryString());
+			var payload = msg.Export();
+			Assert.Equal("00000000", payload.ToArray().ToBinaryString());
 
-            msg = new GenericMessage();
-            msg.Import(payload);
-            Assert.Equal(VLQCodec.MinValue, msg.ReadUnsignedInteger());
-        }
-        [Fact]
-        public void UnsignedInteger_Max() {
-            var msg = new GenericMessage();
-            msg.WriteUnsignedInteger(VLQCodec.MaxValue);
+			msg = new GenericMessage();
+			msg.Import(payload);
+			Assert.False(msg.ReadBoolean());
+		}
 
-            var payload = msg.Export();
-            Assert.Equal("01111110 01111110 01111110 01111110 01111110 01111110 01111110 01111110 01111110 10000000", payload.ToArray().ToBinaryString());
+		[Fact]
+		public void Boolean_True() {
+			var msg = new GenericMessage();
+			msg.WriteBoolean(true);
 
-            msg = new GenericMessage();
-            msg.Import(payload);
-            Assert.Equal(VLQCodec.MaxValue, msg.ReadUnsignedInteger());
-        }
+			var payload = msg.Export();
+			Assert.Equal("00000001", payload.ToArray().ToBinaryString());
 
-        [Fact]
-        public void SignedInteger_Plus100() {
-            var msg = new GenericMessage();
-            msg.WriteSignedInteger(+100);
+			msg = new GenericMessage();
+			msg.Import(payload);
+			Assert.True(msg.ReadBoolean());
+		}
 
-            var payload = msg.Export();
-            Assert.Equal("01001000 10000000", payload.ToArray().ToBinaryString());
+		[Fact]
+		public void SignedInteger_Minus100() {
+			var msg = new GenericMessage();
+			msg.WriteSignedInteger(-100);
 
-            msg = new GenericMessage();
-            msg.Import(payload);
-            Assert.Equal(+100, msg.ReadSignedInteger());
-        }
-        [Fact]
-        public void SignedInteger_Minus100() {
-            var msg = new GenericMessage();
-            msg.WriteSignedInteger(-100);
+			var payload = msg.Export();
+			Assert.Equal("01000111 10000000", payload.ToArray().ToBinaryString());
 
-            var payload = msg.Export();
-            Assert.Equal("01000111 10000000", payload.ToArray().ToBinaryString());
+			msg = new GenericMessage();
+			msg.Import(payload);
+			Assert.Equal(-100, msg.ReadSignedInteger());
+		}
 
-            msg = new GenericMessage();
-            msg.Import(payload);
-            Assert.Equal(-100, msg.ReadSignedInteger());
-        }
+		[Fact]
+		public void SignedInteger_Plus100() {
+			var msg = new GenericMessage();
+			msg.WriteSignedInteger(+100);
 
-        [Fact]
-        public void Boolean_True() {
-            var msg = new GenericMessage();
-            msg.WriteBoolean(true);
+			var payload = msg.Export();
+			Assert.Equal("01001000 10000000", payload.ToArray().ToBinaryString());
 
-            var payload = msg.Export();
-            Assert.Equal("00000001", payload.ToArray().ToBinaryString());
+			msg = new GenericMessage();
+			msg.Import(payload);
+			Assert.Equal(+100, msg.ReadSignedInteger());
+		}
 
-            msg = new GenericMessage();
-            msg.Import(payload);
-            Assert.True(msg.ReadBoolean());
-        }
+		[Fact]
+		public void UnsignedInteger_Max() {
+			var msg = new GenericMessage();
+			msg.WriteUnsignedInteger(VLQCodec.MaxValue);
 
+			var payload = msg.Export();
+			Assert.Equal("01111110 01111110 01111110 01111110 01111110 01111110 01111110 01111110 01111110 10000000", payload.ToArray().ToBinaryString());
 
-        [Fact]
-        public void Boolean_False() {
-            var msg = new GenericMessage();
-            msg.WriteBoolean(false);
+			msg = new GenericMessage();
+			msg.Import(payload);
+			Assert.Equal(VLQCodec.MaxValue, msg.ReadUnsignedInteger());
+		}
 
-            var payload = msg.Export();
-            Assert.Equal("00000000", payload.ToArray().ToBinaryString());
+		[Fact]
+		public void UnsignedInteger_Min() {
+			var msg = new GenericMessage();
+			msg.WriteUnsignedInteger(VLQCodec.MinValue);
 
-            msg = new GenericMessage();
-            msg.Import(payload);
-            Assert.False(msg.ReadBoolean());
-        }
+			var payload = msg.Export();
+			Assert.Equal("10000000", payload.ToArray().ToBinaryString());
 
-        // TODO: Min&max of all other data types
-    }
+			msg = new GenericMessage();
+			msg.Import(payload);
+			Assert.Equal(VLQCodec.MinValue, msg.ReadUnsignedInteger());
+		}
+
+		// TODO: Min&max of all other data types
+	}
 }
