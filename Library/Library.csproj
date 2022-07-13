@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
     <AssemblyName>InvertedTomato.Messages</AssemblyName>
     <RootNamespace>InvertedTomato</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -9,15 +8,16 @@
     <Company>InvertedTomato</Company>
     <Description>Message formats for sending over networks or storing in files.</Description>
     <Version>1.2.1</Version>
-    <AssemblyVersion>1.2.1.0</AssemblyVersion>
-    <FileVersion>1.2.1.0</FileVersion>
+    <AssemblyVersion>1.3.0</AssemblyVersion>
+    <FileVersion>1.3.0</FileVersion>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <PackageVersion>1.2.3</PackageVersion>
+    <PackageVersion>1.3.0</PackageVersion>
     <Title>InvertedTomato.Messages</Title>
     <PackageProjectUrl>https://github.com/invertedtomato/messages</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/invertedtomato/messages/master/LICENSE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/invertedtomato/messages</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <TargetFrameworks>net6.0;netstandard1.3;netstandard2.0;netstandard2.1</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
